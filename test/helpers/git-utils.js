@@ -27,7 +27,7 @@ export async function gitRepo(withRemote, branch = 'master') {
   const dir = tempy.directory();
 
   process.chdir(dir);
-  await execa('git', ['init'].concat(withRemote ? ['--bare'] : []));
+  await execa('git', ['init', ...(withRemote ? ['--bare'] : [])]);
 
   if (withRemote) {
     await initBareRepo(fileUrl(dir), branch);
@@ -220,4 +220,16 @@ export async function push(repositoryUrl = 'origin', branch = 'master') {
  */
 export async function reset(commit = 'HEAD~1') {
   await execa('git', ['reset', commit]);
+}
+
+export async function merge(branch) {
+  await execa('git', ['merge', '--no-ff', branch]);
+}
+
+export async function mergeFf(branch) {
+  await execa('git', ['merge', '--ff', branch]);
+}
+
+export async function rebase(branch) {
+  await execa('git', ['rebase', branch]);
 }
